@@ -1,5 +1,7 @@
 package jaeger.de.miel.hello_grpc;
 
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import io.grpc.ServerInterceptor;
 import io.grpc.health.v1.HealthGrpc;
 import io.grpc.reflection.v1.ServerReflectionGrpc;
@@ -10,15 +12,12 @@ import jaeger.de.miel.hello_grpc.proto.SimpleGrpc;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
 import org.springframework.grpc.autoconfigure.server.GrpcServerFactoryCustomizer;
 import org.springframework.grpc.client.GrpcChannelFactory;
-import org.springframework.grpc.server.DefaultGrpcServerFactory;
 import org.springframework.grpc.server.GlobalServerInterceptor;
 import org.springframework.grpc.server.ServerServiceDefinitionFilter;
 import org.springframework.grpc.server.ShadedNettyGrpcServerFactory;
-import org.springframework.grpc.server.service.ServerInterceptorFilter;
 
 import java.util.Set;
 
@@ -96,12 +95,10 @@ public class HelloGrpcApplication {
     // Setting up a grpc client
     //------------------------------------------------------------------------------------------------------------------
 
-//    @Bean(name = "stub")
-//    @Lazy
-//    SimpleGrpc.SimpleBlockingStub stub(GrpcChannelFactory channels) {
-//        return SimpleGrpc.newBlockingStub(channels.createChannel("local"));
-//    }
-
+    @Bean
+    SimpleGrpc.SimpleBlockingStub stub(GrpcChannelFactory channels) {
+        return SimpleGrpc.newBlockingStub(channels.createChannel("local"));
+    }
 
 
 }
