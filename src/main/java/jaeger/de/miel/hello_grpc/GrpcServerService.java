@@ -11,34 +11,46 @@ import org.springframework.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
 
 @Service
-@GrpcService(interceptors = MyResponseHeaderInterceptor2.class)
+@GrpcService(interceptors = MyResponseHeaderInterceptor2.class)  // Add interceptor on Service level
 public class GrpcServerService extends SimpleGrpc.SimpleImplBase {
 
-    private static Log log = LogFactory.getLog(GrpcServerService.class);
+    private static final Log log = LogFactory.getLog(GrpcServerService.class);
 
     @Override
     public void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
-        log.info("Hello " + request.getName());
+        String name = request.getName();
 
-        if (request.getName().startsWith("error")) {
-            throw new IllegalArgumentException("Bad name: " + request.getName());
-        }
-        if (request.getName().startsWith("internal")) {
-            throw new RuntimeException();
-        }
+        log.info("Hello " + name);
 
-        HelloReply reply = HelloReply.newBuilder().setMessage("Hello ==> " + request.getName()).build();
+        if (name.startsWith("error")) throw new IllegalArgumentException("Bad name: " + name);
+        if (name.startsWith("internal")) throw new RuntimeException();
+
+        String message = "Hello ==> " + name;
+
+        HelloReply reply = HelloReply
+                .newBuilder()
+                .setMessage(message)
+                .build();
+
         responseObserver.onNext(reply);
         responseObserver.onCompleted();
     }
 
     @Override
     public void streamHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
-        log.info("Hello " + request.getName());
+        String name = request.getName();
+
+        log.info("Hello " + name);
 
         int count = 0;
         while (count < 10) {
-            HelloReply reply = HelloReply.newBuilder().setMessage("Hello(" + count + ") ==> " + request.getName()).build();
+            String message = "Hello(" + count + ") ==> " + name;
+
+            HelloReply reply = HelloReply
+                    .newBuilder()
+                    .setMessage(message)
+                    .build();
+
             responseObserver.onNext(reply);
             count++;
 
