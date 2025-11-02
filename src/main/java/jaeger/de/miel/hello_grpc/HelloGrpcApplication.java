@@ -84,10 +84,10 @@ public class HelloGrpcApplication {
     // https://docs.spring.io/spring-grpc/reference/server.html#_per_service
     // Configure interceptor per service
     //------------------------------------------------------------------------------------------------------------------
-    @Bean
-    MyResponseHeaderInterceptor2 myResponseHeaderInterceptor2() {
-        return new MyResponseHeaderInterceptor2();
-    }
+//    @Bean
+//    MyResponseHeaderInterceptor2 myResponseHeaderInterceptor2() {
+//        return new MyResponseHeaderInterceptor2();
+//    }
 
 
     //------------------------------------------------------------------------------------------------------------------
