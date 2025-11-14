@@ -31,6 +31,7 @@
         <grpc.version>1.76.0</grpc.version>
         <protobuf-java.version>4.32.1</protobuf-java.version>
         <spring-grpc.version>0.12.0</spring-grpc.version>
+        <mockito.version>5.11.0</mockito.version>
     </properties>
     <dependencies>
         <dependency>
@@ -74,6 +75,7 @@
             <version>2.2</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -117,6 +119,22 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <!-- Surefire Plugin for JUnit 4 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <!-- Add Mockito agent is not working... -->
+                    <!-- <argLine>-javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar</argLine>-->
+                    <!-- <argLine>-javaagent:${settings.localRepository}/org/mockito/mockito-agent/${mockito.version}/mockito-agent-${mockito.version}.jar</argLine>-->
+                    <!-- https://github.com/mockito/mockito/issues/3037 -->
+                    <!-- https://github.com/raphw/byte-buddy/issues/1803 -->
+                    <argLine>-Dnet.bytebuddy.safe=true -XX:+EnableDynamicAgentLoading</argLine>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 
